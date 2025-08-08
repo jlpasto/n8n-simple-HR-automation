@@ -139,14 +139,13 @@ Build a **full automation** that:
 This workflow has **eliminated manual HR coordination tasks** for Flow Pilot by combining **Gmail label triggers**, **AI-powered content generation**, and **API-driven execution**.  
 With its modular structure, additional labels and actions can be added with minimal effort.  
 
+💡 *The result: Faster hiring process, consistent candidate communication, and centralized logging without touching a single spreadsheet manually.*
 
 ## 📞 Contact
 **Developer:** Jhon Loyd Pastorin  
 **Email:** [jhonloydpastorin.03@gmail.com](mailto:jhonloydpastorin.03@gmail.com)  
 **LinkedIn:** [Jhon Loyd Pastorin](www.linkedin.com/in/jhon-loyd-pastorin-a84000107)  
 **Portfolio:** [jlpasto-portfolio.vercel.app](https://jlpasto-portfolio.vercel.app)  
-
-💡 *The result: Faster hiring process, consistent candidate communication, and centralized logging without touching a single spreadsheet manually.*
 
 ---
 
