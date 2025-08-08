@@ -1,0 +1,1952 @@
+{
+  "name": "for Flow Pilot",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 30,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "Label_5408227790774128841"
+          ],
+          "readStatus": "unread"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        16,
+        16
+      ],
+      "id": "a8a4d61c-7fd1-472c-bab6-f4fde13750a2",
+      "name": "Initial Interview",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IE86DLZA9Kzhw71L",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 30,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "Label_959638189411156819"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        16,
+        208
+      ],
+      "id": "6d8c4b86-8f13-4d0a-87f6-b4adf05d8cc7",
+      "name": "Final Interview",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IE86DLZA9Kzhw71L",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "0f6d1946-0e7f-4ff9-9315-97307c419ef4",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        936
+      ],
+      "id": "dfe1632e-975d-43dd-8d35-ab5a8d67b29a",
+      "name": "Webhook",
+      "webhookId": "0f6d1946-0e7f-4ff9-9315-97307c419ef4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "057598dc-f10e-424f-a7a4-be69e003c72e",
+              "name": "application_stage",
+              "value": "={{ $json.labels[3].name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        16
+      ],
+      "id": "eb46cbc2-a039-48e7-968d-65fc3027db13",
+      "name": "Stage"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.application_stage }}",
+                    "rightValue": "Initial",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "f820f558-6083-4e1e-a2f8-336830e2e113"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Initial Interview"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5cdab42c-e1f4-41ce-b152-962726292c77",
+                    "leftValue": "={{ $json.application_stage }}",
+                    "rightValue": "Final",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Final Interview"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2ba8711a-84fe-492b-b87f-e43c410e13aa",
+                    "leftValue": "={{ $json.application_stage }}",
+                    "rightValue": "Negative",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Negative"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        464,
+        192
+      ],
+      "id": "00f443c6-0a7f-4b73-ba8c-83a48bfa2f51",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "057598dc-f10e-424f-a7a4-be69e003c72e",
+              "name": "application_stage",
+              "value": "={{ $json.labels[1].name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        208
+      ],
+      "id": "ff05557c-b5a6-4083-891d-7ddbcdd2e366",
+      "name": "Stage1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "617ed9af-2b02-4651-918d-4f5c6d735558",
+              "name": "email_from",
+              "value": "={{ $('Initial Interview').item.json.To.includes('<') ? $('Initial Interview').item.json.To.match(/.*<(.*)>.*/)[1] : $('Initial Interview').item.json.To }}",
+              "type": "string"
+            },
+            {
+              "id": "48632123-4425-49e1-8cc5-f6cb4750cef6",
+              "name": "email_to",
+              "value": "={{ $('Initial Interview').item.json.From.includes('<') ? $('Initial Interview').item.json.From.match(/.*<(.*)>.*/)[1] : $('Initial Interview').item.json.From }}",
+              "type": "string"
+            },
+            {
+              "id": "0cf17d8d-4be2-4ac9-a378-0f29091cec9d",
+              "name": "=email_subject",
+              "value": "Thank you for your Application",
+              "type": "string"
+            },
+            {
+              "id": "2ec105bb-e673-4d25-84eb-f9406467190a",
+              "name": "email_body",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        -88
+      ],
+      "id": "ebf0d0c4-e0af-4739-9348-b19f8b2d5bba",
+      "name": "Set Email Variables"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "617ed9af-2b02-4651-918d-4f5c6d735558",
+              "name": "email_from",
+              "value": "={{ $('Final Interview').item.json.From.includes('<') ? $('Final Interview').item.json.From.match(/.*<(.*)>.*/)[1] : $('Final Interview').item.json.From }}",
+              "type": "string"
+            },
+            {
+              "id": "48632123-4425-49e1-8cc5-f6cb4750cef6",
+              "name": "email_to",
+              "value": "={{ $('Final Interview').item.json.To.includes('<') ? $('Final Interview').item.json.To.match(/.*<(.*)>.*/)[1] : $('Final Interview').item.json.To }}",
+              "type": "string"
+            },
+            {
+              "id": "48f3c618-c2a9-4d43-825c-9edcbc26a079",
+              "name": "email_subject",
+              "value": "Final Interview",
+              "type": "string"
+            },
+            {
+              "id": "2ec105bb-e673-4d25-84eb-f9406467190a",
+              "name": "email_body",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1392,
+        208
+      ],
+      "id": "a0358578-5c62-4d7e-bd6d-a5f50eb33dee",
+      "name": "Set Email Variables1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "617ed9af-2b02-4651-918d-4f5c6d735558",
+              "name": "email_from",
+              "value": "={{ $json.creator.email }}",
+              "type": "string"
+            },
+            {
+              "id": "b912f129-62e6-4389-9aeb-4189d2dccaac",
+              "name": "email_cc",
+              "value": "={{ $json.creator.email }}",
+              "type": "string"
+            },
+            {
+              "id": "48632123-4425-49e1-8cc5-f6cb4750cef6",
+              "name": "email_to",
+              "value": "={{ $('Convert form response to JSON').item.json['Email Address'] }}",
+              "type": "string"
+            },
+            {
+              "id": "48f3c618-c2a9-4d43-825c-9edcbc26a079",
+              "name": "email_subject",
+              "value": "Initial Interview Schedule",
+              "type": "string"
+            },
+            {
+              "id": "2ec105bb-e673-4d25-84eb-f9406467190a",
+              "name": "email_body",
+              "value": "=Dear {{ $('Convert form response to JSON').item.json['Full Name'].toTitleCase() }}, <br><br>\n\nThank you for scheduling your initial interview with Flow Pilot! We're excited to speak with you about your application. <br><br><br>\n\nHere are the details for your upcoming interview: <br><br>\n\nDate: {{ new Date($('Convert form response to JSON').item.json['Preferred DateTime'].replace(/^.*?([A-Z][a-z]{2} \\d{2}, \\d{4}).*$/, '$1')).toISOString().slice(0,10) }} <br><br>\n\nTime: {{ \n  (() => {\n    const time = $('Convert form response to JSON').item.json['Preferred DateTime'].match(/(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})/);\n    const format = (h, m) => {\n      const hour = parseInt(h, 10);\n      const suffix = hour < 12 ? 'AM' : 'PM';\n      const hour12 = hour % 12 || 12;\n      return `${hour12}:${m} ${suffix}`;\n    };\n    return `${format(time[1], time[2])} - ${format(time[3], time[4])} Asia/Manila (GMT+08:00)` ;\n  })()\n}} <br><br>\n\nMeeting Link: <a href=\"{{ $json.hangoutLink }}\">Google Meet Link</a> <br><br><br>\n\nPlease ensure you are ready a few minutes before the scheduled time. If you have any questions or need to reschedule, please reply to this email. <br><br>\n\nWe look forward to connecting! <br><br>\n\nBest regards, <br>\nThe Flow Pilot HR Team <br><br>\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1136,
+        936
+      ],
+      "id": "2559faac-ca4e-474a-9cb2-2ceba041051c",
+      "name": "Set Email Variables2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional HR coordinator. Write a warm and encouraging email to a job applicant who has successfully reached the final interview stage.\n\nUse the following details:\n- Name: {{ $json.applicant_name }}\n- Interview Date: {{ $json.meeting_datetime }}\n- Meeting Link: <a href=\"{{ $json.meeting_link }}\" > Google Meeting Link </a>\n- HR Nname: Flow Pilot HR Team\n\nInclude the following:\n1. Congratulate the applicant for reaching the final interview.\n2. Express enthusiasm about potentially working together.\n3. Provide the interview schedule and meeting link.\n4. Encourage them to be prepared and confident.\n\nWrite in a polite, professional, and motivational tone. Keep it concise but positive.\n\nThe output should be a well structured html email. In email body use break tags <br> instead of \\n.\nOutput only the string email body without notation like \"```html ```\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        104
+      ],
+      "id": "7486d6d1-ea8e-4e85-8f34-c0453af648d2",
+      "name": "AI Agent",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1112,
+        328
+      ],
+      "id": "16de58a7-1237-42b3-8f42-08c5a74b3b5b",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "FUDGOV1uaUYTufpO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 30,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "Label_6925146625929390738"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        16,
+        400
+      ],
+      "id": "6a1b0974-0075-4b8e-ad83-478f72525fbe",
+      "name": "Negative",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IE86DLZA9Kzhw71L",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "057598dc-f10e-424f-a7a4-be69e003c72e",
+              "name": "application_stage",
+              "value": "={{ $json.labels[1].name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        400
+      ],
+      "id": "6366c7fb-0cd5-4805-8fe2-686e49fcefba",
+      "name": "Stage2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        760,
+        728
+      ],
+      "id": "2fbda506-9964-4e48-a582-13b8b3ee632c",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "FUDGOV1uaUYTufpO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "617ed9af-2b02-4651-918d-4f5c6d735558",
+              "name": "email_from",
+              "value": "={{ $('Negative').item.json.From.includes('<') ? $('Negative').item.json.From.match(/.*<(.*)>.*/)[1] : $('Negative').item.json.From }}",
+              "type": "string"
+            },
+            {
+              "id": "48632123-4425-49e1-8cc5-f6cb4750cef6",
+              "name": "email_to",
+              "value": "={{ $('Negative').item.json.To.includes('<') ? $('Negative').item.json.To.match(/.*<(.*)>.*/)[1] : $('Negative').item.json.To }}",
+              "type": "string"
+            },
+            {
+              "id": "48f3c618-c2a9-4d43-825c-9edcbc26a079",
+              "name": "email_subject",
+              "value": "Thank You for your application!",
+              "type": "string"
+            },
+            {
+              "id": "2ec105bb-e673-4d25-84eb-f9406467190a",
+              "name": "email_body",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        504
+      ],
+      "id": "5626f36b-59a4-48a7-95fe-efc320f58d74",
+      "name": "Set Email Variables3"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        760,
+        32
+      ],
+      "id": "38a6547e-72b4-4a9e-aa7f-5b6f46673474",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "FUDGOV1uaUYTufpO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2584,
+        432
+      ],
+      "id": "1cd29665-149e-4ac2-a467-ea6dcd39ec18",
+      "name": "OpenAI Chat Model4",
+      "credentials": {
+        "openAiApi": {
+          "id": "FUDGOV1uaUYTufpO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3e2ed201-9e1a-4904-8b30-430f7bf2cd8f",
+              "name": "meeting_datetime",
+              "value": "={{    new Date(new Date($today).getTime() + 4 * 24 * 60 * 60 * 1000)     .toLocaleString('en-US', {       weekday: 'long',       year: 'numeric',       month: 'long',       day: 'numeric',       hour: 'numeric',       minute: '2-digit',       hour12: true,       timeZone: 'Asia/Manila'     })  }}",
+              "type": "string"
+            },
+            {
+              "id": "2cad18ac-844e-4294-b45f-e1f31de7cbf3",
+              "name": "",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "4b31bc63-e1ec-43a1-aa6f-610f4f05f5eb",
+              "name": "meeting_link",
+              "value": "https://calendar.app.google/SCaV8VQNqGL9gwd68",
+              "type": "string"
+            },
+            {
+              "id": "00c7729f-3e08-49c2-a44f-d69905136259",
+              "name": "applicant_name",
+              "value": "={{$('Final Interview').item.json.From?.match(/^(.*?)(\\s*<.*>)?$/)?.[1]?.trim().toTitleCase() ?? \"Applicant\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        208
+      ],
+      "id": "fd210c13-2ab8-4898-86c3-0eb5c3bd955d",
+      "name": "Meeting Details"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2328,
+        1160
+      ],
+      "id": "f34de09e-35b4-4474-a08b-898df2581737",
+      "name": "OpenAI Chat Model5",
+      "credentials": {
+        "openAiApi": {
+          "id": "FUDGOV1uaUYTufpO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        504
+      ],
+      "id": "e1719a64-f506-427c-825b-5980f5c40884",
+      "name": "Flow Complete"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        3088,
+        208
+      ],
+      "id": "bfdc2912-a6cc-47a8-b832-6c5362d309d8",
+      "name": "Flow Complete2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2064,
+        -88
+      ],
+      "id": "1dae642c-b54f-4bad-afad-30ffc4b53e53",
+      "name": "Trigger Webhook when user books a meeting"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2832,
+        936
+      ],
+      "id": "a31dd0e5-e9c2-4d17-8daf-76d935ec31b2",
+      "name": "Flow Complete3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=As a professional HR coordinator, your task is to compose a warm and encouraging thank-you email to a job applicant.\n\nEmail Objective:\nAcknowledge their application and express gratitude.\n\nEncourage them to schedule an interview at their earliest convenience.\n\nThe option is a  JotForm appointment template link.\n\nUse the following input parameters:\n\n- Applicant Name:  {{$('Initial Interview').item.json.From?.match(/^(.*?)(\\s*<.*>)?$/)?.[1]?.trim().toTitleCase() ?? \"Applicant\" }}\n\n- hr_coordinator_name: Flow Pilot HR Team\n\n- Jot_Form_link: https://form.jotform.com/252171015127445\n\n- company_name: Flow Pilot\n\n\nOutput Format:\nGenerate the email body only. Ensure the tone is professional yet friendly and inviting. The output should be a well structured html email. In email body use break tags <br> instead of \\n.\nOutput only the string email body without notation like \"```html ```\"\n\nExample of Expected Output (using placeholder data):\n\nBody:\n\nDear [Applicant Name],\n\nThank you so much for your interest in the [Job Title] position at [Company Name] and for submitting your application! We appreciate you taking the time to apply.\n\nWe were impressed with your qualifications and would love to invite you for an interview to discuss your experience further and tell you more about this exciting opportunity.\n\nTo make scheduling easy for you, please book via JotForm: [JotForm Link]\n\n\nPlease select a time that works best for you. If you have any questions before your interview, feel free to reply to this email.\n\nWe look forward to speaking with you soon!\n\nBest regards,\n\n[HR Coordinator Name]\nHR Coordinator\n[Company Name]",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        -192
+      ],
+      "id": "79cb3fc0-42bb-42e3-9781-504d46028f85",
+      "name": "AI Agent Generate Email",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a594fe38-ccfc-4003-8e7d-8102fd4ee9f8",
+              "name": "raw_email",
+              "value": "=From: jhonloydpastorin.030303@gmail.com\nTo: {{ $json.email_to }}\nSubject: {{ $json.email_subject }}\nContent-Type: text/html; charset=\"UTF-8\"\n\n{{ $json.email_body }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1392,
+        -88
+      ],
+      "id": "98f445c4-be43-4773-8cc6-76f30d680a3a",
+      "name": "Set Raw Email"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst updatedItems = items.map((item) => {\n  const rawEmail = item?.json?.raw_email;\n  const encodedEmail = Buffer.from(rawEmail).toString(\"base64\");\n  item.json.encodedEmail = encodedEmail;\n  return item;\n});\nreturn updatedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        -88
+      ],
+      "id": "373998fc-218c-48b2-843e-2e1d42761b41",
+      "name": "Base64 Encode Email"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst updatedItems = items.map((item) => {\n  const rawEmail = item?.json?.raw_email;\n  const encodedEmail = Buffer.from(rawEmail).toString(\"base64\");\n  item.json.encodedEmail = encodedEmail;\n  return item;\n});\nreturn updatedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1840,
+        208
+      ],
+      "id": "73a9a7d1-07f6-4981-9acb-b40ad7cbd23e",
+      "name": "Base64 Encode Email1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"raw\": \"{{ $json.encodedEmail }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1840,
+        -88
+      ],
+      "id": "32ebbf96-7716-4286-8f16-834f87c0b584",
+      "name": "Send Email using HTTP",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IE86DLZA9Kzhw71L",
+          "name": "Gmail account"
+        },
+        "oAuth2Api": {
+          "id": "4mn48NrtovCfEYzC",
+          "name": "Gmail API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a594fe38-ccfc-4003-8e7d-8102fd4ee9f8",
+              "name": "raw_email",
+              "value": "=From: jhonloydpastorin.030303@gmail.com\nTo: {{ $json.email_to }}\nSubject: {{ $json.email_subject }}\nContent-Type: text/html; charset=\"UTF-8\"\n\n{{ $json.email_body }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1616,
+        208
+      ],
+      "id": "a688c755-d136-4b2d-8d90-ca9cdad5509e",
+      "name": "Set Raw Email1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst updatedItems = items.map((item) => {\n  const rawEmail = item?.json?.raw_email;\n  const encodedEmail = Buffer.from(rawEmail).toString(\"base64\");\n  item.json.encodedEmail = encodedEmail;\n  return item;\n});\nreturn updatedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        504
+      ],
+      "id": "73b36db9-91e9-4fbb-aa3e-851584640db2",
+      "name": "Base64 Encode Email2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"raw\": \"{{ $json.encodedEmail }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2064,
+        208
+      ],
+      "id": "2f4cf51e-abeb-4292-a069-d6480f9cbd0e",
+      "name": "Send Email using HTTP1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IE86DLZA9Kzhw71L",
+          "name": "Gmail account"
+        },
+        "oAuth2Api": {
+          "id": "4mn48NrtovCfEYzC",
+          "name": "Gmail API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/14tXCn9BMMcaLw1xTWp7z0Fw1Bz3rL9-NHxP2PQuW-Ww/values/Final!A1:append?valueInputOption=USER_ENTERED",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"values\": [\n    [\n      \"{{$('Final Interview').item.json.From?.match(/^(.*?)(\\s*<.*>)?$/)?.[1]?.trim() ?? \"Applicant\" }}\",\n      \"{{ $('Final Interview').item.json.To.includes('<') ? $('Final Interview').item.json.To.match(/.*<(.*)>.*/)[1] : $('Final Interview').item.json.To }}\",\n      \"{{ \n  new Date(new Date($today).getTime() + 4 * 24 * 60 * 60 * 1000)\n    .toLocaleString('en-US', {\n      weekday: 'long',\n      year: 'numeric',\n      month: 'long',\n      day: 'numeric',\n      hour: 'numeric',\n      minute: '2-digit',\n      hour12: true,\n      timeZone: 'Asia/Manila'\n    }) \n}}\",\n      \"https://calendar.app.google/SCaV8VQNqGL9gwd68\",\n      \"{{ new Date().toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZoneName: 'short' }) }}\",\n      \"Final\"\n    ]\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2288,
+        208
+      ],
+      "id": "411e5734-2d90-44d0-993d-271d9dccab3a",
+      "name": "Update Google Sheet",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "abVw6DieeGlAkInl",
+          "name": "Google Sheet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=As a helpful HR Assistant Bot, your task is to generate a brief and informative summary message about a job applicant, specifically formatted for a Discord channel. The message should quickly convey key details to the recruitment team.\n\nMessage Objective:\nAnnounce an update on an existing applicant.\n\nSummarize essential details about the applicant and their application.\n\nProvide quick links for team members to access more information.\n\nBe concise and easy to read within a Discord chat environment.\n\nInput Parameters:\napplicant_name: {{ $('Meeting Details').item.json.applicant_name }}\n\njob_title: \"Automation Specialist\"\n\nemail:{{ $('Set Email Variables1').item.json.email_to}}\n\napplication_status: \"Final Interview Scheduled\"\n\nDetails: {{ $('Meeting Details').item.json.meeting_datetime }}\n\nMeeting Link: {{ $('Meeting Details').item.json.meeting_link }}\n\nkey_qualifications: A very brief, one-sentence summary or a few keywords highlighting their most relevant qualifications or experience (e.g., \"5+ years in digital marketing, strong SEO skills\", or \"Excellent communication, project management experience\").\n\n\n\nOutput Format:\nGenerate a single string containing the complete Discord message. Use Discord's Markdown for formatting (e.g., **bold**, *italics*, _underline_, \\code``) and consider using relevant emojis for visual clarity.\n\n\nExample of Expected Output (using placeholder data):\n🗓️ **Interview Scheduled!** 🗓️\n\n**Applicant:** John Doe\n**Email:** sample@gmail.com\n**Role:** Senior Software Engineer\n**Status:** Interview Scheduled\n**Details:** Monday, August 12th at 10:00 AM PST\n**Meeting Link:** https://meet.google.com/abc-xyz\n\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2512,
+        208
+      ],
+      "id": "bb944568-bb6b-4535-9841-5b5b48ba6bcd",
+      "name": "AI Agent Generate Discord Message",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://discord.com/api/webhooks/1403280605009149993/rLRu8jTn3RPdLZhZBPqRnRFjTmXLwmR6m8wrMBNN_WKiesgPyDpq1zHmYnyqfU3ZncRX",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": {{ JSON.stringify($json.output) }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2864,
+        208
+      ],
+      "id": "75327483-e663-41a5-8f5d-99c6cb76c6ed",
+      "name": "Push Message to Discord"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional HR coordinator. Write a warm and encouraging rejection email to a job applicant who reached the final interview stage.\n\nUse the following details:\n\nName: {{$('Negative').item.json.From?.match(/^(.?)(\\s<.*>)?$/)?.[1]?.trim() \n  ?? $('Negative').item.json.snippet?.match(/Initial Interview with\\s+(\\w+)/i)?.[1] \n  ?? \"Applicant\"\n}}\n\n\nHR Name: Flow Pilot HR Team\n\nInclude the following:\n\nThank the applicant for participating in the interview process.\n\nGently inform them that they were not selected for the role.\n\nOffer encouragement for their career journey.\n\nLeave the door open for future opportunities if appropriate.\n\nWrite in a polite, professional, and supportive tone. Keep it concise but warm.\n\nThe output should be a well-structured HTML email. In the email body, use <br> tags instead of \\n.\n\nOutput only the string email body, with no code fences like ```html or markdown notation.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        504
+      ],
+      "id": "a4d11879-dccd-49bb-b7a1-7d9a15e44315",
+      "name": "AI Agent Generate Email Message",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a594fe38-ccfc-4003-8e7d-8102fd4ee9f8",
+              "name": "raw_email",
+              "value": "=From: jhonloydpastorin.030303@gmail.com\nTo: {{ $json.email_to }}\nSubject: {{ $json.email_subject }}\nContent-Type: text/html; charset=\"UTF-8\"\n\n{{ $json.email_body }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1392,
+        504
+      ],
+      "id": "1ea2d2ee-3020-42b4-b42b-4310fbb0f35f",
+      "name": "Set Raw Email2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"raw\": \"{{ $json.encodedEmail }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1840,
+        504
+      ],
+      "id": "dfcbbdda-4b75-4f11-b111-2c7746515fe7",
+      "name": "Send Email using HTTP2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IE86DLZA9Kzhw71L",
+          "name": "Gmail account"
+        },
+        "oAuth2Api": {
+          "id": "4mn48NrtovCfEYzC",
+          "name": "Gmail API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/14tXCn9BMMcaLw1xTWp7z0Fw1Bz3rL9-NHxP2PQuW-Ww/values/Negative!A1:append?valueInputOption=USER_ENTERED",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"values\": [\n    [\n      \"{{$('Negative').item.json.From?.match(/^(.*?)(\\s*<.*>)?$/)?.[1]?.trim() ?? \"Applicant\" }}\",\n      \"{{ $('Negative').item.json.To.includes('<') ? $('Negative').item.json.To.match(/.*<(.*)>.*/)[1] : $('Negative').item.json.To }}\",\n    \n      \"{{ new Date().toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZoneName: 'short' }) }}\",\n      \"Negative\"\n    ]\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2064,
+        504
+      ],
+      "id": "e8a0222c-5dc2-4782-b682-448aa7e917e6",
+      "name": "Update Google Sheet1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "abVw6DieeGlAkInl",
+          "name": "Google Sheet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cce0ee6d-a040-49d1-a99c-500249c7aac8",
+              "name": "form_response",
+              "value": "={{ $json.body.pretty }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        936
+      ],
+      "id": "33d6c6bf-b7b5-4c0a-8cf1-e30f00659ccf",
+      "name": "Get Form Response"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.form_response\n\n// Updated regex to match new format\nconst regex = /Full Name:(.*?),\\s*Contact Number:(.*?),\\s*Email Address:(.*?),\\s*Address:(.*?),\\s*What date and time work best for you\\?\\:(.*?),\\s*What position are you interested in\\?\\:(.*?),\\s*Would you like to be notified about promotional services\\?\\:(.*)/;\n\nconst match = raw.match(regex);\n\nif (match) {\n  const preferredDateTimeRaw = match[5].trim();\n\n  // Extract date and time from Preferred DateTime\n  const dateMatch = preferredDateTimeRaw.match(/^(.*\\d{4}) (\\d{2}:\\d{2})/);\n\n  if (!dateMatch) {\n    return [{ json: { error: \"Failed to extract date/time from Preferred DateTime.\", success: false } }];\n  }\n\n  const datePart = dateMatch[1];\n  const timePart = dateMatch[2];\n  const combined = `${datePart} ${timePart}`;\n\n  const startDateTime = DateTime.fromFormat(\n    combined,\n    \"EEEE, LLL dd, yyyy HH:mm\",\n    { zone: \"Asia/Manila\" }\n  ).toISO();\n\n  const endDateTime = DateTime.fromFormat(\n    combined,\n    \"EEEE, LLL dd, yyyy HH:mm\",\n    { zone: \"Asia/Manila\" }\n  ).plus({ hours: 1 }).toISO();\n\n  return [\n    {\n      json: {\n        success: true,\n        \"Full Name\": match[1].trim(),\n        \"Contact Number\": match[2].trim(),\n        \"Email Address\": match[3].trim(),\n        \"Address\": match[4].trim(),\n        \"Preferred DateTime\": match[5].trim(),\n        \"Interested Position\": match[6].trim(),\n        \"Promo Consent\": match[7].trim(),\n        \"Start Date Time\": startDateTime,\n        \"End Date Time\": endDateTime\n      }\n    }\n  ];\n} else {\n  return [{ json: { error: \"No match found. Input format may be invalid.\", success: false } }];\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        944
+      ],
+      "id": "164cd2c5-3e2d-49fa-ab6a-f8704ec273d5",
+      "name": "Convert form response to JSON"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2b085b6f-11d9-4485-b24e-1e9e6375a756",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": "=true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        936
+      ],
+      "id": "ae391dff-b395-4b8b-a9f1-7e1c4509042c",
+      "name": "If success"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"summary\": \"Initial Interview with {{ $json['Full Name'] }}\",\n  \"description\": \"Initial interview with the candidate.\",\n  \"start\": {\n    \"dateTime\": \"{{ $json['Start Date Time'] }}\",\n    \"timeZone\": \"Asia/Manila\"\n  },\n  \"end\": {\n    \"dateTime\": \"{{ $json['End Date Time'] }}\",\n    \"timeZone\": \"Asia/Manila\"\n  },\n  \"attendees\": [\n    { \"email\": \"{{ $json['Email Address'] }}\" },\n    { \"email\": \"jhonloydpastorin.030303@gmail.com\" }\n  ],\n  \"conferenceData\": {\n    \"createRequest\": {\n      \"requestId\": \"{{ $json['Email Address'] }}-{{ new Date().getTime() }}\",\n      \"conferenceSolutionKey\": {\n        \"type\": \"hangoutsMeet\"\n      }\n    }\n  },\n  \"reminders\": {\n    \"useDefault\": false,\n    \"overrides\": [\n      { \"method\": \"email\", \"minutes\": 1440 },\n      { \"method\": \"popup\", \"minutes\": 10 }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        912,
+        936
+      ],
+      "id": "a93efa9b-033d-434d-ab5f-74f0054208e8",
+      "name": "Create Calendar Invite using HTTP",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "b6PZSrnrQ4Eli99M",
+          "name": "Google Calendar"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a594fe38-ccfc-4003-8e7d-8102fd4ee9f8",
+              "name": "raw_email",
+              "value": "=From: {{ $json.email_from }}\nTo: {{ $json.email_to }}\nCc: {{ $json.email_cc }}\nSubject: {{ $json.email_subject }}\nContent-Type: text/html; charset=\"UTF-8\"\n\n{{ $json.email_body }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1360,
+        936
+      ],
+      "id": "9e883a78-8593-4212-b59b-762040f6644c",
+      "name": "Set Raw Email3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst updatedItems = items.map((item) => {\n  const rawEmail = item?.json?.raw_email;\n  const encodedEmail = Buffer.from(rawEmail).toString(\"base64\");\n  item.json.encodedEmail = encodedEmail;\n  return item;\n});\nreturn updatedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        936
+      ],
+      "id": "b99f1cd2-96ca-445a-a5da-f8ef0c715c4e",
+      "name": "Base64 Encode Email3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"raw\": \"{{ $json.encodedEmail }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1808,
+        936
+      ],
+      "id": "39c9db0b-6451-4f87-a88a-e80607ff1e11",
+      "name": "Send Email using HTTP3",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "4mn48NrtovCfEYzC",
+          "name": "Gmail API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/14tXCn9BMMcaLw1xTWp7z0Fw1Bz3rL9-NHxP2PQuW-Ww/values/Initial!A1:append?valueInputOption=USER_ENTERED",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"values\": [\n    [\n      \"{{ $('If success').item.json['Full Name'] }}\",\n      \"{{ $('If success').item.json['Email Address'] }}\",\n      \"{{ $('If success').item.json['Contact Number'] }}\",\n      \"{{ $('If success').item.json.Address }}\",\n      \"{{ $('If success').item.json['Preferred DateTime'] }}\",\n      \"{{ $('Create Calendar Invite using HTTP').item.json.hangoutLink }}\",\n      \"{{ new Date().toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZoneName: 'short' }) }}\",\n      \"Initial\"\n    ]\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2032,
+        936
+      ],
+      "id": "0620180d-04dd-409b-9ac3-83468e83db49",
+      "name": "Update Google Sheet2",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "abVw6DieeGlAkInl",
+          "name": "Google Sheet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=As a helpful HR Assistant Bot, your task is to generate a brief and informative summary message about a job applicant, specifically formatted for a Discord channel. The message should quickly convey key details to the recruitment team.\n\nMessage Objective:\nAnnounce a new applicant or an update on an existing applicant.\n\nSummarize essential details about the applicant and their application.\n\nProvide quick links for team members to access more information.\n\nBe concise and easy to read within a Discord chat environment.\n\nInput Parameters (to be provided by N8N workflow):\napplicant_name: {{ $('Convert form response to JSON').item.json['Full Name'] }}\n\njob_title: {{ $('Convert form response to JSON').item.json['Interested Services'] }}\n\nemail:{{ $('Convert form response to JSON').item.json['Email Address'] }}\n\nContact Number: {{ $('Convert form response to JSON').item.json['Contact Number'] }}\n\nAddress: {{ $('Convert form response to JSON').item.json.Address }}\n\napplication_status: \"New Application Received\"\n\nmeeeting_date: {{ $('Create Calendar Invite using HTTP').item.json.start.dateTime }} {{ $('Create Calendar Invite using HTTP').item.json.start.timeZone }}\n\nmeeeting_link: {{ $('Create Calendar Invite using HTTP').item.json.hangoutLink }}\n\nOutput Format:\nGenerate a single string containing the complete Discord message. Use Discord's Markdown for formatting (e.g., **bold**, *italics*, _underline_, \\code``) and consider using relevant emojis for visual clarity.\n\n\nExample of Expected Output (using placeholder data):\n✨ **New Applicant Alert!** ✨\n\n**Applicant:** Sarah Lee\n**Email:** jl@gmail.com\n**Phone:** (099) 550-7241\n**Address:** Binan City, Laguna\n**Role:** Marketing Specialist\n**Status:** New Application Received\n**Interview Date:** Friday, Aug 08, 2025 08:00-09:00 Asia/Manila (GMT+08:00)\n\n\n---\n\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2256,
+        936
+      ],
+      "id": "8b951eed-11c0-43d6-97d0-ac95abde5ee3",
+      "name": "AI Agent Generate Discord Message1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://discord.com/api/webhooks/1403271727382794241/A8xqUQfmQupMjzG4OLcWNZlpGgfSIwSiM4kDRDuZTVZZcvDidt4tZXYI-HZDQ8jQsRZC",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": {{ JSON.stringify($json.output) }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2608,
+        936
+      ],
+      "id": "1b26c336-2bed-4abb-8272-8d81e96edcee",
+      "name": "Push Message to Discord1"
+    },
+    {
+      "parameters": {
+        "content": "# 📌 Initial Interview Workflow\n\n1. **Trigger**  \n   When a label **\"Initial Interview\"** is added in Gmail (polling every 30 minutes).\n\n2. **HTTP Node** – Send a thank-you email via Gmail API  \n   - Include **JotForm appointment template link**  \n\n3. **HTTP Node** – Once booked, create Google Meet & Calendar invite  \n   - Invite the candidate  \n   - Invite your calendar email\n\n4. **HTTP Node** – Log to **Google Sheets** (`Initial` tab)\n\n5. **AI Agent** – Create a **Discord summary message**\n\n6. **HTTP Node** – Send to **Discord webhook** (`Initial` channel)",
+        "height": 496,
+        "width": 656
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -976,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "9cc00c4f-9df1-4e52-badb-e37821f6b154",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# 📌 Final Interview & Assessment Workflow\n\n1. **Trigger**  \n   Gmail label **\"Final Interview\"** (polling every 30 minutes).\n\n2. **AI Agent** – Generate message confirming final round\n\n3. **HTTP Node** – Send email with **assessment link**\n\n4. **HTTP Node** – Create new Calendar invite with Google Meet  \n   - Schedule **4 days after the trigger date**  \n     > Example: If trigger date is **Aug 4**, the Google Meet date must be **Aug 8**  \n   - Send invite to **final interviewer** and **candidate**\n\n5. **HTTP Node** – Append to **Final** Google Sheet\n\n6. **AI Agent** – Generate Discord message \n\n7. **HTTP Node** – Send Discord message to **Final Interview** channel\n",
+        "height": 496,
+        "width": 656,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -976,
+        272
+      ],
+      "typeVersion": 1,
+      "id": "6f940879-26ef-4f04-b72d-98f616380c64",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# 📌 Negative Workflow\n\n1. **Trigger**  \n   Gmail label **\"Negative\"** (polling every 30 minutes).\n\n2. **AI Agent** – Draft a respectful rejection message\n\n3. **HTTP Node** – Send email via Gmail API\n\n4. **HTTP Node** – Log candidate info to **Negative** Google Sheet\n",
+        "height": 496,
+        "width": 656,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -976,
+        816
+      ],
+      "typeVersion": 1,
+      "id": "ce4547fd-df49-4b17-bdca-0a12d5f364c3",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {
+    "Initial Interview": [
+      {
+        "json": {
+          "id": "1987dd9b1581e2d1",
+          "threadId": "1987dd9b1581e2d1",
+          "snippet": "test 1",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 5675,
+          "historyId": "191866",
+          "internalDate": "1754458134000",
+          "labels": [
+            {
+              "id": "IMPORTANT",
+              "name": "IMPORTANT"
+            },
+            {
+              "id": "CATEGORY_PERSONAL",
+              "name": "CATEGORY_PERSONAL"
+            },
+            {
+              "id": "UNREAD",
+              "name": "UNREAD"
+            },
+            {
+              "id": "Label_5408227790774128841",
+              "name": "Initial"
+            }
+          ],
+          "From": "jhonloyd pastorin <jhonloydpastorin.03@gmail.com>",
+          "Subject": "test1",
+          "To": "jhonloydpastorin.030303@gmail.com"
+        }
+      }
+    ],
+    "Negative": [
+      {
+        "json": {
+          "id": "19882fd03d4fb3c5",
+          "threadId": "19882fcec4e11b5e",
+          "snippet": "Initial Interview with Jl Pastorin Tinanggihan ni jhonloyd pastorin ang imbitasyong ito. Sumali gamit ang Google Meet Link ng meeting meet.google.com/fmt-tftz-ttb Initial interview with the candidate.",
+          "payload": {
+            "mimeType": "multipart/mixed"
+          },
+          "sizeEstimate": 35031,
+          "historyId": "193418",
+          "internalDate": "1754544275000",
+          "labels": [
+            {
+              "id": "CATEGORY_PERSONAL",
+              "name": "CATEGORY_PERSONAL"
+            },
+            {
+              "id": "Label_6925146625929390738",
+              "name": "Negative"
+            }
+          ],
+          "Subject": "Tinanggihan: Initial Interview with Jl Pastorin @ Biy 8 Ago 2025 8AM - 9AM (GMT+8) (jhonloydpastorin.030303@gmail.com)",
+          "From": "jhonloyd pastorin <jhonloydpastorin.030303@gmail.com>",
+          "To": "jhonloydpastorin.03@gmail.com"
+        }
+      }
+    ],
+    "Final Interview": [
+      {
+        "json": {
+          "id": "19876187deb5a42c",
+          "threadId": "1987141e358617c6",
+          "snippet": "Hi Gab, I confirm that I have received the instructions and will proceed with the assessment. Thank you! Noong Lun, Ago 4, 2025 nang 3:17 PM, sinulat ni Flow Pilot &lt;flowpilot25@gmail.com&gt; ang: Hi",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 7826,
+          "historyId": "194072",
+          "internalDate": "1754328044000",
+          "labels": [
+            {
+              "id": "SENT",
+              "name": "SENT"
+            },
+            {
+              "id": "Label_959638189411156819",
+              "name": "Final"
+            }
+          ],
+          "Subject": "Re: Automation specialist",
+          "From": "Jhon Loyd Pastorin <jhonloydpastorin.030303@gmail.com>",
+          "To": "JHON <jhonloydpastorin.03@gmail.com>"
+        }
+      }
+    ],
+    "AI Agent Generate Email Message": [
+      {
+        "json": {
+          "output": "<p>Dear Jl,</p><br><p>Thank you very much for taking the time to participate in our interview process. We truly appreciate your interest in the role and the effort you put into each stage.</p><br><p>After careful consideration, we have decided to move forward with another candidate for this position. This decision was not an easy one, given the strong pool of applicants, including yourself.</p><br><p>We encourage you to continue pursuing your career goals with confidence and enthusiasm. Your skills and experience are valuable, and we believe you have a bright future ahead.</p><br><p>Please know that we would be happy to consider your application for any suitable opportunities that may arise in the future.</p><br><p>Thank you again for your time and understanding. We wish you all the best in your career journey.</p><br><p>Sincerely,<br>Flow Pilot HR Team</p>"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Initial Interview": {
+      "main": [
+        [
+          {
+            "node": "Stage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Form Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Final Interview": {
+      "main": [
+        [
+          {
+            "node": "Stage1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stage": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Generate Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Meeting Details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent Generate Email Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Email Variables": {
+      "main": [
+        [
+          {
+            "node": "Set Raw Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stage1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Email Variables1": {
+      "main": [
+        [
+          {
+            "node": "Set Raw Email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Email Variables2": {
+      "main": [
+        [
+          {
+            "node": "Set Raw Email3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Set Email Variables1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Negative": {
+      "main": [
+        [
+          {
+            "node": "Stage2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stage2": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Generate Email Message",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Email Variables3": {
+      "main": [
+        [
+          {
+            "node": "Set Raw Email2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Generate Email",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Generate Discord Message",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Meeting Details": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Generate Discord Message1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Generate Email": {
+      "main": [
+        [
+          {
+            "node": "Set Email Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Raw Email": {
+      "main": [
+        [
+          {
+            "node": "Base64 Encode Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base64 Encode Email": {
+      "main": [
+        [
+          {
+            "node": "Send Email using HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base64 Encode Email1": {
+      "main": [
+        [
+          {
+            "node": "Send Email using HTTP1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email using HTTP": {
+      "main": [
+        [
+          {
+            "node": "Trigger Webhook when user books a meeting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Raw Email1": {
+      "main": [
+        [
+          {
+            "node": "Base64 Encode Email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base64 Encode Email2": {
+      "main": [
+        [
+          {
+            "node": "Send Email using HTTP2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email using HTTP1": {
+      "main": [
+        [
+          {
+            "node": "Update Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Generate Discord Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Generate Discord Message": {
+      "main": [
+        [
+          {
+            "node": "Push Message to Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Push Message to Discord": {
+      "main": [
+        [
+          {
+            "node": "Flow Complete2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Generate Email Message": {
+      "main": [
+        [
+          {
+            "node": "Set Email Variables3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Raw Email2": {
+      "main": [
+        [
+          {
+            "node": "Base64 Encode Email2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email using HTTP2": {
+      "main": [
+        [
+          {
+            "node": "Update Google Sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Google Sheet1": {
+      "main": [
+        [
+          {
+            "node": "Flow Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Form Response": {
+      "main": [
+        [
+          {
+            "node": "Convert form response to JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert form response to JSON": {
+      "main": [
+        [
+          {
+            "node": "If success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If success": {
+      "main": [
+        [
+          {
+            "node": "Create Calendar Invite using HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Calendar Invite using HTTP": {
+      "main": [
+        [
+          {
+            "node": "Set Email Variables2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Raw Email3": {
+      "main": [
+        [
+          {
+            "node": "Base64 Encode Email3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base64 Encode Email3": {
+      "main": [
+        [
+          {
+            "node": "Send Email using HTTP3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email using HTTP3": {
+      "main": [
+        [
+          {
+            "node": "Update Google Sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Google Sheet2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Generate Discord Message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Generate Discord Message1": {
+      "main": [
+        [
+          {
+            "node": "Push Message to Discord1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Push Message to Discord1": {
+      "main": [
+        [
+          {
+            "node": "Flow Complete3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0e86fef7-5aa7-4647-9f25-6570a9263351",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "68fe891f55307e74b32da75f2eeea4c3743d5b53352a8eeacc5ebff024390e5c"
+  },
+  "id": "FUmcpCaiZpT24Far",
+  "tags": []
+}
