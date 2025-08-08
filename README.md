@@ -105,9 +105,12 @@ Build a **full automation** that:
 ---
 
 ## 📂 File Structure
+```cmd
 /n8n-simple-HR-automation
 │── README.md
 │── workflow.json # Exported n8n workflow
+│── workflow.png # Workflow preview
+```
 
 
 ---
